@@ -2,7 +2,7 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { LineType } from "../types";
 
 // Initialize Gemini
-const ai = new GoogleGenAI({ apiKey: process.env.HUYEN_VI });
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export const interpretHexagram = async (lines: LineType[]): Promise<any> => {
   // Convert lines array (0,1) to visual representation for the prompt
