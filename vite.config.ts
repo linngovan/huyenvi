@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
       },
       plugins: [react()],
       define: {
-        'process.env.GEMINI_API_KEY_HUYEN_VI': JSON.stringify(env.GEMINI_API_KEY_HUYEN_VI)
+        'process.env.HUYEN_VI': JSON.stringify(env.HUYEN_VI)
       },
       resolve: {
         alias: {
