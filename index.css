@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+/* Project-level customizations (you can also keep inline styles in index.html) */
+/* Example: set default font fallback to Roboto if loaded in index.html */
+/* body { @apply font-roboto; } */
