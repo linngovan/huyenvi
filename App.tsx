@@ -78,33 +78,6 @@ const App: React.FC = () => {
     }
   };
 
-  const handleShare = async () => {
-    if (!result) return;
-
-    const shareData = {
-      title: `Huyền Vi Kinh Dịch - ${result.hexagramName}`,
-      text: `Gieo quẻ: ${result.hexagramName}\n"${result.originalText}"\n\nLời khuyên: ${result.advice}\n\n#HuyenVi #KinhDich`,
-      url: window.location.href,
-    };
-
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch (err) {
-        console.log('Error sharing:', err);
-      }
-    } else {
-      // Fallback: Copy to clipboard
-      const textToCopy = `${shareData.title}\n${shareData.text}\n${shareData.url}`;
-      try {
-        await navigator.clipboard.writeText(textToCopy);
-        alert('Đã sao chép kết quả vào bộ nhớ tạm!');
-      } catch (err) {
-        console.error('Failed to copy:', err);
-      }
-    }
-  };
-
   useEffect(() => {
     if (state === 'RESULT' && scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -123,7 +96,7 @@ const App: React.FC = () => {
       {/* Music Toggle Button - Fixed Top Right */}
       <button 
         onClick={toggleMusic}
-        className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-purple-300 hover:text-white hover:bg-white/10 transition-all duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+        className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-purple-300 hover:text-white hover:bg-white/10 transition-all duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.3)] cursor-pointer"
         title={isMusicPlaying ? "Tắt nhạc" : "Bật nhạc nền"}
       >
         {isMusicPlaying ? (
@@ -201,7 +174,7 @@ const App: React.FC = () => {
                 
                 <button 
                   onClick={handleStart}
-                  className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-medium text-white transition duration-300 ease-out border border-purple-500/30 rounded-full shadow-md group hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] cursor-pointer"
+                  className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-medium text-white transition duration-300 ease-out border border-purple-500/30 rounded-full shadow-md group hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] cursor-pointer z-30"
                 >
                   <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-purple-600 group-hover:translate-x-0 ease">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -264,21 +237,13 @@ const App: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="flex flex-col gap-3">
+                  <div className="flex flex-col gap-3 relative z-20">
                     <button 
                       onClick={handleStart}
-                      className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-sm font-bold tracking-widest text-purple-300 hover:text-white transition-all duration-300 uppercase group"
+                      className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-sm font-bold tracking-widest text-purple-300 hover:text-white transition-all duration-300 uppercase group cursor-pointer"
                     >
                       <span className="inline-block transition-transform group-hover:rotate-180 mr-2">↻</span>
                       Gieo Quẻ Mới
-                    </button>
-
-                    <button 
-                      onClick={handleShare}
-                      className="w-full py-4 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 rounded-2xl text-sm font-bold tracking-widest text-white transition-all duration-300 uppercase group flex items-center justify-center gap-2"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
-                      Chia Sẻ
                     </button>
                   </div>
                 </div>
