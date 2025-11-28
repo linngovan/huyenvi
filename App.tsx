@@ -9,12 +9,50 @@ const App: React.FC = () => {
   const [state, setState] = useState<AppState>('INTRO');
   const [lines, setLines] = useState<LineType[]>([]);
   const [result, setResult] = useState<InterpretationResponse | null>(null);
+  
+  // Audio State
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  // Toggle Music Function
+  const toggleMusic = () => {
+    if (audioRef.current) {
+      if (isMusicPlaying) {
+        audioRef.current.pause();
+      } else {
+        // Handle browser autoplay policy
+        const playPromise = audioRef.current.play();
+        if (playPromise !== undefined) {
+          playPromise.catch((error) => {
+            console.log("Audio play failed:", error);
+          });
+        }
+      }
+      setIsMusicPlaying(!isMusicPlaying);
+    }
+  };
+
+  // Set volume on mount
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3; // Low ambient volume
+    }
+  }, []);
 
   const handleStart = () => {
     setLines([]);
     setResult(null);
     setState('TOSSING');
+    
+    // Optional: Auto-start music on interaction if not already playing (uncomment if desired)
+    /* 
+    if (!isMusicPlaying && audioRef.current) {
+      audioRef.current.play().catch(() => {});
+      setIsMusicPlaying(true);
+    } 
+    */
   };
 
   const handleLineGenerated = (line: LineType) => {
@@ -40,6 +78,33 @@ const App: React.FC = () => {
     }
   };
 
+  const handleShare = async () => {
+    if (!result) return;
+
+    const shareData = {
+      title: `Huyền Vi Kinh Dịch - ${result.hexagramName}`,
+      text: `Gieo quẻ: ${result.hexagramName}\n"${result.originalText}"\n\nLời khuyên: ${result.advice}\n\n#HuyenVi #KinhDich`,
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log('Error sharing:', err);
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      const textToCopy = `${shareData.title}\n${shareData.text}\n${shareData.url}`;
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        alert('Đã sao chép kết quả vào bộ nhớ tạm!');
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    }
+  };
+
   useEffect(() => {
     if (state === 'RESULT' && scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -49,6 +114,38 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen w-full font-roboto bg-[#020617] text-white relative overflow-x-hidden selection:bg-purple-500 selection:text-white">
       
+      {/* Background Audio Element */}
+      {/* Using a royalty-free ambient track 'Nebula' or similar spiritual drone */}
+      <audio ref={audioRef} loop>
+        <source src="https://cdn.pixabay.com/audio/2022/10/18/audio_31c2730e64.mp3" type="audio/mpeg" />
+      </audio>
+
+      {/* Music Toggle Button - Fixed Top Right */}
+      <button 
+        onClick={toggleMusic}
+        className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-purple-300 hover:text-white hover:bg-white/10 transition-all duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.3)]"
+        title={isMusicPlaying ? "Tắt nhạc" : "Bật nhạc nền"}
+      >
+        {isMusicPlaying ? (
+          // Speaker Wave Icon (On)
+          <div className="relative">
+             <svg className="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+             </svg>
+             <span className="absolute -top-1 -right-1 flex h-2 w-2">
+               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+               <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+             </span>
+          </div>
+        ) : (
+          // Speaker X Icon (Off)
+          <svg className="w-6 h-6 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
+          </svg>
+        )}
+      </button>
+
       {/* Modern Background Ambience */}
       <div className="fixed inset-0 pointer-events-none z-0">
          {/* Deep gradient base */}
@@ -167,13 +264,23 @@ const App: React.FC = () => {
                     </p>
                   </div>
 
-                  <button 
-                    onClick={handleStart}
-                    className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-sm font-bold tracking-widest text-purple-300 hover:text-white transition-all duration-300 uppercase group"
-                  >
-                    <span className="inline-block transition-transform group-hover:rotate-180 mr-2">↻</span>
-                    Gieo Quẻ Mới
-                  </button>
+                  <div className="flex flex-col gap-3">
+                    <button 
+                      onClick={handleStart}
+                      className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-sm font-bold tracking-widest text-purple-300 hover:text-white transition-all duration-300 uppercase group"
+                    >
+                      <span className="inline-block transition-transform group-hover:rotate-180 mr-2">↻</span>
+                      Gieo Quẻ Mới
+                    </button>
+
+                    <button 
+                      onClick={handleShare}
+                      className="w-full py-4 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/30 rounded-2xl text-sm font-bold tracking-widest text-white transition-all duration-300 uppercase group flex items-center justify-center gap-2"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                      Chia Sẻ
+                    </button>
+                  </div>
                 </div>
 
                 {/* Right Column: Interpretation */}
