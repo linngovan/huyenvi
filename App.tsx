@@ -152,7 +152,7 @@ const App: React.FC = () => {
            <div className="h-[1px] w-32 bg-gradient-to-r from-transparent via-purple-500 to-transparent mb-5 opacity-70"></div>
            
            <p className="text-purple-200/70 font-light text-xs md:text-sm tracking-[0.4em] uppercase">
-             Kinh Dịch • Artificial Intelligence
+             Kinh Dịch • AI
            </p>
         </header>
 
