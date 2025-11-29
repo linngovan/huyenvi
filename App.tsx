@@ -301,7 +301,7 @@ const App: React.FC = () => {
         </main>
 
         <footer className="text-center mt-8 text-slate-500 text-xs font-light tracking-widest uppercase">
-          <p>© 2024 Huyền Vi • Developed by linnv</p>
+          <p>© 2024 Huyền Vi • Developed by AI TIEN TRI</p>
         </footer>
       </div>
     </div>
