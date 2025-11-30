@@ -304,7 +304,7 @@ const App: React.FC = () => {
           <p className="mb-2 text-amber-400/70 normal-case tracking-normal italic">
             ⚠️ Thông tin mang tính tham khảo. AI có thể sai sót. Vui lòng kiểm tra kỹ thông tin.
           </p>
-          <p className="uppercase">© 2024 Huyền Vi • Developed by AI TIEN TRI</p>
+          <p className="uppercase">© 2024 Huyền Vi • Developed by <a href="https://aitientri-ruby.vercel.app/" target="_blank" rel="noopener noreferrer" className="underline hover:text-purple-300 transition-colors">AI TIEN TRI</a></p>
         </footer>
       </div>
     </div>
