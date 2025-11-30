@@ -109,7 +109,7 @@ The `vercel.json` file in the root directory is pre-configured to:
 ## Notes
 
 - `.env.local` is ignored by git (in `.gitignore`) and should never be committed
-- `GEMINI_API_KEY` is injected during build time via `vite.config.ts`
+- `GEMINI_API_KEY` is used by the serverless function in `api/interpret.ts`
 - All Tailwind CSS is processed locally (no CDN dependency)
 - App supports Vietnamese language throughout
 
