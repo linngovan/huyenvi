@@ -9,11 +9,11 @@ const App: React.FC = () => {
   const [state, setState] = useState<AppState>('INTRO');
   const [lines, setLines] = useState<LineType[]>([]);
   const [result, setResult] = useState<InterpretationResponse | null>(null);
-  
+
   // Audio State
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
-  
+
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Toggle Music Function
@@ -45,7 +45,7 @@ const App: React.FC = () => {
     setLines([]);
     setResult(null);
     setState('TOSSING');
-    
+
     // Optional: Auto-start music on interaction if not already playing (uncomment if desired)
     /* 
     if (!isMusicPlaying && audioRef.current) {
@@ -86,7 +86,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen w-full font-roboto bg-[#020617] text-white relative overflow-x-hidden selection:bg-purple-500 selection:text-white">
-      
+
       {/* Background Audio Element */}
       {/* Using a royalty-free ambient track 'Nebula' or similar spiritual drone */}
       <audio ref={audioRef} loop>
@@ -94,7 +94,7 @@ const App: React.FC = () => {
       </audio>
 
       {/* Music Toggle Button - Fixed Top Right */}
-      <button 
+      <button
         onClick={toggleMusic}
         className="fixed top-6 right-6 z-50 p-3 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-purple-300 hover:text-white hover:bg-white/10 transition-all duration-300 group shadow-[0_0_15px_rgba(168,85,247,0.3)] cursor-pointer"
         title={isMusicPlaying ? "Tắt nhạc" : "Bật nhạc nền"}
@@ -102,13 +102,13 @@ const App: React.FC = () => {
         {isMusicPlaying ? (
           // Speaker Wave Icon (On)
           <div className="relative">
-             <svg className="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
-             </svg>
-             <span className="absolute -top-1 -right-1 flex h-2 w-2">
-               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-               <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
-             </span>
+            <svg className="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+            </svg>
+            <span className="absolute -top-1 -right-1 flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+            </span>
           </div>
         ) : (
           // Speaker X Icon (Off)
@@ -121,44 +121,44 @@ const App: React.FC = () => {
 
       {/* Modern Background Ambience */}
       <div className="fixed inset-0 pointer-events-none z-0">
-         {/* Deep gradient base */}
-         <div className="absolute inset-0 bg-gradient-to-b from-[#0f0720] via-[#1e1b4b] to-[#020617]"></div>
-         
-         {/* Glowing orbs */}
-         <div className="absolute top-[-10%] left-[20%] w-[40vw] h-[40vw] rounded-full bg-purple-600/10 blur-[100px] animate-pulse"></div>
-         <div className="absolute bottom-[-10%] right-[10%] w-[30vw] h-[30vw] rounded-full bg-blue-600/10 blur-[100px]"></div>
-         
-         {/* Grid overlay */}
-         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light"></div>
+        {/* Deep gradient base */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f0720] via-[#1e1b4b] to-[#020617]"></div>
+
+        {/* Glowing orbs */}
+        <div className="absolute top-[-10%] left-[20%] w-[40vw] h-[40vw] rounded-full bg-purple-600/10 blur-[100px] animate-pulse"></div>
+        <div className="absolute bottom-[-10%] right-[10%] w-[30vw] h-[30vw] rounded-full bg-blue-600/10 blur-[100px]"></div>
+
+        {/* Grid overlay */}
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light"></div>
       </div>
 
       <div className="max-w-5xl mx-auto px-4 py-10 relative z-10 flex flex-col min-h-screen">
-        
+
         {/* Header */}
         <header className="flex flex-col items-center justify-center mb-16 mt-12 relative z-20">
-           {/* Logo container with increased bottom margin to prevent overlap */}
-           <div className="w-20 h-20 mb-8 relative group">
-              <div className="absolute inset-0 bg-purple-600 rounded-full blur-[25px] opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
-              <div className="relative w-full h-full transition-transform duration-700 group-hover:rotate-180">
-                 <YinYangSymbol spinning={state === 'CALCULATING'} />
-              </div>
-           </div>
-           
-           {/* Added py-4 and leading-tight to prevent accent clipping */}
-           <h1 className="text-5xl md:text-7xl font-thin tracking-[0.2em] text-center mb-2 py-4 leading-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-purple-100 to-purple-400 drop-shadow-[0_0_20px_rgba(168,85,247,0.6)] select-none">
-             HUYỀN VI
-           </h1>
-           
-           <div className="h-[1px] w-32 bg-gradient-to-r from-transparent via-purple-500 to-transparent mb-5 opacity-70"></div>
-           
-           <p className="text-purple-200/70 font-light text-xs md:text-sm tracking-[0.4em] uppercase">
-             Kinh Dịch • AI
-           </p>
+          {/* Logo container with increased bottom margin to prevent overlap */}
+          <div className="w-20 h-20 mb-8 relative group">
+            <div className="absolute inset-0 bg-purple-600 rounded-full blur-[25px] opacity-40 group-hover:opacity-60 transition-opacity duration-500"></div>
+            <div className="relative w-full h-full transition-transform duration-700 group-hover:rotate-180">
+              <YinYangSymbol spinning={state === 'CALCULATING'} />
+            </div>
+          </div>
+
+          {/* Added py-4 and leading-tight to prevent accent clipping */}
+          <h1 className="text-5xl md:text-7xl font-thin tracking-[0.2em] text-center mb-2 py-4 leading-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-purple-100 to-purple-400 drop-shadow-[0_0_20px_rgba(168,85,247,0.6)] select-none">
+            HUYỀN VI
+          </h1>
+
+          <div className="h-[1px] w-32 bg-gradient-to-r from-transparent via-purple-500 to-transparent mb-5 opacity-70"></div>
+
+          <p className="text-purple-200/70 font-light text-xs md:text-sm tracking-[0.4em] uppercase">
+            Kinh Dịch • AI
+          </p>
         </header>
 
         {/* Main Content */}
         <main className="flex-grow flex flex-col items-center justify-center w-full">
-          
+
           {/* INTRO */}
           {state === 'INTRO' && (
             <div className="w-full max-w-2xl animate-[fadeIn_0.8s_ease-out]">
@@ -168,11 +168,11 @@ const App: React.FC = () => {
 
                 <h2 className="text-2xl font-light mb-6 text-white">Khởi Tạo Quẻ</h2>
                 <p className="mb-8 leading-relaxed text-slate-300 font-light text-lg">
-                  Tập trung vào câu hỏi của bạn và nhấn nút bên dưới. 
+                  Tập trung vào câu hỏi của bạn và nhấn nút bên dưới.
                   Hệ thống sẽ tự động thực hiện 6 lần gieo hào để kiến tạo quẻ dịch tương ứng với năng lượng của bạn.
                 </p>
-                
-                <button 
+
+                <button
                   onClick={handleStart}
                   className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-medium text-white transition duration-300 ease-out border border-purple-500/30 rounded-full shadow-md group hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] cursor-pointer z-30"
                 >
@@ -192,9 +192,9 @@ const App: React.FC = () => {
               <div className="mb-10 scale-110">
                 <HexagramVisual lines={lines} />
               </div>
-              <CoinToss 
-                onTossComplete={handleLineGenerated} 
-                tossCount={lines.length} 
+              <CoinToss
+                onTossComplete={handleLineGenerated}
+                tossCount={lines.length}
               />
             </div>
           )}
@@ -202,9 +202,9 @@ const App: React.FC = () => {
           {/* CALCULATING */}
           {state === 'CALCULATING' && (
             <div className="flex flex-col items-center justify-center animate-pulse">
-               <div className="mb-10 scale-110 relative">
-                 <HexagramVisual lines={lines} />
-                 <div className="absolute inset-0 bg-purple-500/20 blur-xl rounded-full animate-ping"></div>
+              <div className="mb-10 scale-110 relative">
+                <HexagramVisual lines={lines} />
+                <div className="absolute inset-0 bg-purple-500/20 blur-xl rounded-full animate-ping"></div>
               </div>
               <h2 className="text-2xl font-light text-white mb-2 tracking-widest">PHÂN TÍCH DỮ LIỆU</h2>
               <div className="flex gap-1 mt-2">
@@ -218,9 +218,9 @@ const App: React.FC = () => {
           {/* RESULT */}
           {state === 'RESULT' && result && (
             <div ref={scrollRef} className="w-full max-w-4xl animate-[fadeInUp_0.8s_ease-out] pb-12">
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
+
                 {/* Left Column: Hexagram & Meta */}
                 <div className="lg:col-span-4 flex flex-col gap-6">
                   <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 text-center flex flex-col items-center shadow-lg relative overflow-hidden">
@@ -238,7 +238,7 @@ const App: React.FC = () => {
                   </div>
 
                   <div className="flex flex-col gap-3 relative z-20">
-                    <button 
+                    <button
                       onClick={handleStart}
                       className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-sm font-bold tracking-widest text-purple-300 hover:text-white transition-all duration-300 uppercase group cursor-pointer"
                     >
@@ -250,7 +250,7 @@ const App: React.FC = () => {
 
                 {/* Right Column: Interpretation */}
                 <div className="lg:col-span-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg relative">
-                  
+
                   {/* General */}
                   <div className="mb-10">
                     <h3 className="text-xl font-medium text-purple-400 mb-4 flex items-center gap-2 uppercase tracking-widest text-xs">
@@ -265,8 +265,8 @@ const App: React.FC = () => {
                     {/* Career */}
                     <div className="bg-purple-900/20 p-6 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-colors">
                       <h3 className="text-white font-medium mb-3 flex items-center gap-2">
-                         <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                         Công Danh & Tài Lộc
+                        <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                        Công Danh & Tài Lộc
                       </h3>
                       <p className="text-slate-300 text-sm leading-relaxed font-light">
                         {result.career}
@@ -300,8 +300,11 @@ const App: React.FC = () => {
           )}
         </main>
 
-        <footer className="text-center mt-8 text-slate-500 text-xs font-light tracking-widest uppercase">
-          <p>© 2024 Huyền Vi • Developed by AI TIEN TRI</p>
+        <footer className="text-center mt-8 text-slate-500 text-xs font-light tracking-widest">
+          <p className="mb-2 text-amber-400/70 normal-case tracking-normal italic">
+            ⚠️ Thông tin mang tính tham khảo. AI có thể sai sót. Vui lòng kiểm tra kỹ thông tin.
+          </p>
+          <p className="uppercase">© 2024 Huyền Vi • Developed by AI TIEN TRI</p>
         </footer>
       </div>
     </div>
