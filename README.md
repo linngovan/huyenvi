@@ -16,7 +16,7 @@ View your app in AI Studio: https://ai.studio/apps/drive/1K0iYwAeUE0BjoK_EKMmbQj
    ```bash
    npm install
    ```
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+2. Set the `GEMINI_API_KEY` in [.env](.env) to your Gemini API key
 3. Run the app:
    ```bash
    npm run dev
@@ -108,7 +108,7 @@ The `vercel.json` file in the root directory is pre-configured to:
 
 ## Notes
 
-- `.env.local` is ignored by git (in `.gitignore`) and should never be committed
+- `.env` is ignored by git (in `.gitignore`) and should never be committed
 - `GEMINI_API_KEY` is used by the serverless function in `api/interpret.ts`
 - All Tailwind CSS is processed locally (no CDN dependency)
 - App supports Vietnamese language throughout

@@ -1,4 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
+import { getHexagramName } from "../hexagramData";
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -18,29 +19,37 @@ export default async function handler(req, res) {
             return res.status(500).json({ error: 'Server configuration error' });
         }
 
+        // Determine hexagram name from pattern BEFORE calling Gemini
+        const hexagramName = getHexagramName(lines);
+
+        // Log only in development (optional - helps with debugging)
+        if (process.env.NODE_ENV !== 'production') {
+            console.log(`Hexagram identified: ${hexagramName}`);
+        }
+
+
         const ai = new GoogleGenAI({ apiKey });
 
-        // Map lines (0/1) to visual string
+        // Map lines (0/1) to visual string for context
         // 1 = Yang (Dương), 0 = Yin (Âm)
         const visualLines = lines.map(l => l === 1 ? "Dương (—)" : "Âm (- -)").join(", ");
 
         const prompt = `
-      Tôi vừa gieo một quẻ Kinh Dịch. Các hào từ dưới lên trên (Hào 1 đến Hào 6) là:
-      [${visualLines}]
+      Bạn là bậc thầy Kinh Dịch uyên bác. Tôi đã gieo được quẻ "${hexagramName}".
+      Các hào từ dưới lên trên (Hào 1 đến Hào 6) là: [${visualLines}]
 
-      Hãy đóng vai một bậc thầy về Kinh Dịch và Phong Thủy học uyên bác, giọng văn cổ kính, trang trọng nhưng dễ hiểu, sâu sắc.
-      Hãy xác định tên quẻ (Ví dụ: Thuần Càn, Hỏa Thủy Vị Tế, Địa Thiên Thái...).
-      Sau đó bình giải quẻ này cho người gieo.
+      Hãy luận giải quẻ này cho người xin quẻ với giọng văn cổ kính, trang trọng nhưng dễ hiểu, sâu sắc.
 
       Trả về kết quả dưới dạng JSON theo cấu trúc sau (không cần markdown block, chỉ trả về JSON thuần):
       {
-        "hexagramName": "Tên quẻ (Hán Việt)",
-        "originalText": "Một câu thơ hoặc ý nghĩa cốt lõi ngắn gọn của quẻ (ví dụ: Nguyên hanh lợi trinh...)",
-        "generalMeaning": "Luận giải tổng quan về ý nghĩa của quẻ trong thời điểm hiện tại.",
+        "hexagramName": "${hexagramName}",
+        "originalText": "Một câu thơ hoặc ý nghĩa cốt lõi ngắn gọn của quẻ ${hexagramName} (ví dụ: Nguyên hanh lợi trinh...)",
+        "generalMeaning": "Luận giải tổng quan về ý nghĩa của quẻ ${hexagramName} trong thời điểm hiện tại.",
         "career": "Luận giải về công danh, sự nghiệp, tài lộc.",
         "love": "Luận giải về tình duyên, gia đạo.",
         "advice": "Lời khuyên hành động cụ thể cho người xin quẻ."
       }
+
     `;
 
         const response = await ai.models.generateContent({
@@ -74,7 +83,14 @@ export default async function handler(req, res) {
         // Parse JSON if it's a string, otherwise return as is
         const result = typeof text === 'string' ? JSON.parse(text) : text;
 
+        // Ensure hexagram name matches the lookup (override if Gemini returned different name)
+        if (result.hexagramName !== hexagramName) {
+            console.warn(`Gemini returned different hexagram name: ${result.hexagramName}, correcting to: ${hexagramName}`);
+            result.hexagramName = hexagramName;
+        }
+
         return res.status(200).json(result);
+
 
     } catch (error) {
         console.error("Error in API:", error);

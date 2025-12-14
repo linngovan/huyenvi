@@ -21,6 +21,12 @@ pnpm-lock.yaml
 .env.local
 .env.*.local
 
+# Dev server (local development only)
+local-server.ts
+
+# Artifacts (Antigravity brain directory)
+.gemini
+
 # Dev server
 .vite/
 
