@@ -1,4 +1,4 @@
-const { GoogleGenAI, Type } = require("@google/genai");
+import { GoogleGenAI, Type } from "@google/genai";
 
 // Inline hexagram data - all 64 I Ching hexagrams
 const HEXAGRAMS = [
@@ -78,7 +78,7 @@ function getHexagramName(lines) {
     return hexagram ? hexagram.name : 'Quẻ Chưa Xác Định';
 }
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -158,4 +158,4 @@ module.exports = async function handler(req, res) {
             details: error instanceof Error ? error.message : String(error)
         });
     }
-};
+}
