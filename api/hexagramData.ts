@@ -1,4 +1,5 @@
-import { LineType } from './types';
+import { LineType } from "../types";
+
 
 export interface Hexagram {
     id: number;

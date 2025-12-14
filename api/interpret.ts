@@ -1,5 +1,6 @@
 import { GoogleGenAI, Type } from "@google/genai";
-import { getHexagramName } from "../hexagramData";
+import { getHexagramName } from "./hexagramData";
+
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
