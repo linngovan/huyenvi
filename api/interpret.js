@@ -1,8 +1,7 @@
-import { GoogleGenAI, Type } from "@google/genai";
-import { getHexagramName } from "./hexagramData";
+const { GoogleGenAI, Type } = require("@google/genai");
+const { getHexagramName } = require("./hexagramData");
 
-
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -22,12 +21,6 @@ export default async function handler(req, res) {
 
         // Determine hexagram name from pattern BEFORE calling Gemini
         const hexagramName = getHexagramName(lines);
-
-        // Log only in development (optional - helps with debugging)
-        if (process.env.NODE_ENV !== 'production') {
-            console.log(`Hexagram identified: ${hexagramName}`);
-        }
-
 
         const ai = new GoogleGenAI({ apiKey });
 
@@ -92,7 +85,6 @@ export default async function handler(req, res) {
 
         return res.status(200).json(result);
 
-
     } catch (error) {
         console.error("Error in API:", error);
         return res.status(500).json({
@@ -100,4 +92,4 @@ export default async function handler(req, res) {
             details: error instanceof Error ? error.message : String(error)
         });
     }
-}
+};

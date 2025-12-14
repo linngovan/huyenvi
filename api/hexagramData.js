@@ -1,14 +1,3 @@
-import { LineType } from "../types";
-
-
-export interface Hexagram {
-    id: number;
-    name: string;
-    pattern: [LineType, LineType, LineType, LineType, LineType, LineType];
-    upperTrigram: string;
-    lowerTrigram: string;
-}
-
 /**
  * 64 Hexagrams of I Ching (Kinh Dịch) - King Wen Sequence
  * Pattern format: [Line1, Line2, Line3, Line4, Line5, Line6] (bottom to top)
@@ -18,7 +7,7 @@ export interface Hexagram {
  * Càn ☰ (111), Đoài ☱ (011), Ly ☲ (101), Chấn ☳ (001)
  * Tốn ☴ (110), Khảm ☵ (010), Cấn ☶ (100), Khôn ☷ (000)
  */
-export const HEXAGRAMS: Hexagram[] = [
+const HEXAGRAMS = [
     { id: 1, name: "Thuần Càn", pattern: [1, 1, 1, 1, 1, 1], upperTrigram: "Càn", lowerTrigram: "Càn" },
     { id: 2, name: "Thuần Khôn", pattern: [0, 0, 0, 0, 0, 0], upperTrigram: "Khôn", lowerTrigram: "Khôn" },
     { id: 3, name: "Thủy Lôi Truân", pattern: [1, 0, 0, 0, 1, 0], upperTrigram: "Khảm", lowerTrigram: "Chấn" },
@@ -93,10 +82,10 @@ export const HEXAGRAMS: Hexagram[] = [
 
 /**
  * Get hexagram name from line pattern
- * @param lines Array of 6 lines (bottom to top)
- * @returns Hexagram name in Vietnamese
+ * @param {number[]} lines - Array of 6 lines (bottom to top)
+ * @returns {string} Hexagram name in Vietnamese
  */
-export function getHexagramName(lines: LineType[]): string {
+function getHexagramName(lines) {
     if (lines.length !== 6) {
         console.warn('Invalid hexagram: must have exactly 6 lines');
         return 'Quẻ Chưa Xác Định';
@@ -117,10 +106,10 @@ export function getHexagramName(lines: LineType[]): string {
 
 /**
  * Get full hexagram data from line pattern
- * @param lines Array of 6 lines (bottom to top)
- * @returns Hexagram object or null if not found
+ * @param {number[]} lines - Array of 6 lines (bottom to top)
+ * @returns {object|null} Hexagram object or null if not found
  */
-export function getHexagram(lines: LineType[]): Hexagram | null {
+function getHexagram(lines) {
     if (lines.length !== 6) {
         return null;
     }
@@ -129,3 +118,9 @@ export function getHexagram(lines: LineType[]): Hexagram | null {
         h.pattern.every((line, index) => line === lines[index])
     ) || null;
 }
+
+module.exports = {
+    getHexagramName,
+    getHexagram,
+    HEXAGRAMS
+};
