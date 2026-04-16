@@ -7,9 +7,8 @@ interface HexagramVisualProps {
 }
 
 const HexagramVisual: React.FC<HexagramVisualProps> = ({ lines, activeLineIndex }) => {
-  // Logic remains: Lines stored Bottom -> Top, Displayed Top -> Bottom
-  const renderLines = [...lines].reverse(); 
-
+  // Lines stored Bottom -> Top, Displayed Top -> Bottom
+  // i=0 renders line 6 (top), i=5 renders line 1 (bottom)
   const getLineNumber = (renderIndex: number) => 6 - renderIndex;
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AppState, LineType, InterpretationResponse } from './types';
 import CoinToss from './components/CoinToss';
 import HexagramVisual from './components/HexagramVisual';
@@ -55,18 +55,18 @@ const App: React.FC = () => {
     */
   };
 
-  const handleLineGenerated = (line: LineType) => {
-    const newLines = [...lines, line];
-    setLines(newLines);
-
-    if (newLines.length === 6) {
-      // Wait a bit after the last line is generated before showing calculating state
-      setTimeout(() => {
-        setState('CALCULATING');
-        processResult(newLines);
-      }, 800);
-    }
-  };
+  const handleLineGenerated = useCallback((line: LineType) => {
+    setLines(prev => {
+      const newLines = [...prev, line];
+      if (newLines.length === 6) {
+        setTimeout(() => {
+          setState('CALCULATING');
+          processResult(newLines);
+        }, 800);
+      }
+      return newLines;
+    });
+  }, []);
 
   const processResult = async (completedLines: LineType[]) => {
     try {
@@ -125,8 +125,8 @@ const App: React.FC = () => {
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f0720] via-[#1e1b4b] to-[#020617]"></div>
 
         {/* Glowing orbs */}
-        <div className="absolute top-[-10%] left-[20%] w-[40vw] h-[40vw] rounded-full bg-purple-600/10 blur-[100px] animate-pulse"></div>
-        <div className="absolute bottom-[-10%] right-[10%] w-[30vw] h-[30vw] rounded-full bg-blue-600/10 blur-[100px]"></div>
+        <div className="absolute top-[-10%] left-[20%] w-[30vw] h-[30vw] rounded-full bg-purple-600/10 blur-[60px]"></div>
+        <div className="absolute bottom-[-10%] right-[10%] w-[20vw] h-[20vw] rounded-full bg-blue-600/10 blur-[60px]"></div>
 
         {/* Grid overlay */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light"></div>
@@ -204,7 +204,7 @@ const App: React.FC = () => {
             <div className="flex flex-col items-center justify-center animate-pulse">
               <div className="mb-10 scale-110 relative">
                 <HexagramVisual lines={lines} />
-                <div className="absolute inset-0 bg-purple-500/20 blur-xl rounded-full animate-ping"></div>
+                <div className="absolute inset-0 bg-purple-500/10 blur-md rounded-full"></div>
               </div>
               <h2 className="text-2xl font-light text-white mb-2 tracking-widest">PHÂN TÍCH DỮ LIỆU</h2>
               <div className="flex gap-1 mt-2">
