@@ -1,5 +1,6 @@
 import React from 'react';
 import { PRODUCTS } from '../data/products';
+import { trackEvent } from '../services/analytics';
 
 const ProductRecommend: React.FC = () => {
   return (
@@ -20,6 +21,12 @@ const ProductRecommend: React.FC = () => {
             href={product.affiliateLink}
             target="_blank"
             rel="noopener noreferrer sponsored"
+            onClick={() => trackEvent('select_item', {
+              item_list_name: 'Vật Phẩm Hộ Mệnh Gợi Ý',
+              product_name: product.name,
+              affiliate_link: product.affiliateLink,
+              items: [{ item_name: product.name, index: idx }],
+            })}
             className="snap-start lg:snap-align-none shrink-0 w-40 md:w-48 lg:w-full bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-purple-500/40 transition-colors group"
           >
             <div className="aspect-square w-full overflow-hidden bg-white/5">

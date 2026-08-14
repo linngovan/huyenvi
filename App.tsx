@@ -5,6 +5,7 @@ import HexagramVisual from './components/HexagramVisual';
 import { interpretHexagram } from './services/interpretService';
 import { YinYangSymbol } from './components/YinYangSymbol';
 import ProductRecommend from './components/ProductRecommend';
+import { trackEvent } from './services/analytics';
 
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>('INTRO');
@@ -174,7 +175,10 @@ const App: React.FC = () => {
                 </p>
 
                 <button
-                  onClick={handleStart}
+                  onClick={() => {
+                    trackEvent('click_xin_que');
+                    handleStart();
+                  }}
                   className="relative inline-flex items-center justify-center px-10 py-4 overflow-hidden font-medium text-white transition duration-300 ease-out border border-purple-500/30 rounded-full shadow-md group hover:shadow-[0_0_20px_rgba(168,85,247,0.5)] cursor-pointer z-30"
                 >
                   <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-purple-600 group-hover:translate-x-0 ease">
@@ -240,7 +244,10 @@ const App: React.FC = () => {
 
                   <div className="flex flex-col gap-3 relative z-20">
                     <button
-                      onClick={handleStart}
+                      onClick={() => {
+                        trackEvent('click_gieo_que_lai');
+                        handleStart();
+                      }}
                       className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-sm font-semibold tracking-widest text-purple-300 hover:text-white transition-all duration-300 uppercase group cursor-pointer"
                     >
                       <span className="inline-block transition-transform group-hover:rotate-180 mr-2">↻</span>
