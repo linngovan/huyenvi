@@ -16,12 +16,11 @@ View your app in AI Studio: https://ai.studio/apps/drive/1K0iYwAeUE0BjoK_EKMmbQj
    ```bash
    npm install
    ```
-2. Set the `GEMINI_API_KEY` in [.env](.env) to your Gemini API key
-3. Run the app:
+2. Run the app:
    ```bash
    npm run dev
    ```
-   The app will open on `http://localhost:3000/`
+   The app will open on `http://localhost:3002/`
 
 ## Build for Production
 
@@ -48,10 +47,7 @@ npm run preview
 3. Click "Add New" → "Project"
 4. Import your GitHub repository
 5. Vercel will auto-detect Vite configuration
-6. Before deploying, set environment variables:
-   - Go to **Project Settings** → **Environment Variables**
-   - Add `GEMINI_API_KEY` with your actual Gemini API key
-7. Click "Deploy"
+6. Click "Deploy"
 
 ### Manual Deploy via Vercel CLI
 
@@ -61,20 +57,9 @@ vercel login
 vercel
 ```
 
-Then set the environment variable when prompted, or add it in the Vercel dashboard after deployment.
-
-### Environment Variables on Vercel
-
-In your Vercel project settings, add:
-
-| Variable | Value |
-|----------|-------|
-| `GEMINI_API_KEY` | Your Gemini API key (get it from [Google AI Studio](https://aistudio.google.com/app/apikey)) |
-
 The `vercel.json` file in the root directory is pre-configured to:
 - Build: `npm run build`
 - Output: `dist/` directory
-- Auto-load environment variables during build
 
 ## Project Structure
 
@@ -95,7 +80,9 @@ The `vercel.json` file in the root directory is pre-configured to:
     ├── HexagramVisual.tsx      # I Ching hexagram display
     └── YinYangSymbol.tsx       # Yin-Yang symbol component
 └── services/
-    └── geminiService.ts       # Gemini AI integration
+    └── interpretService.ts    # Calls /api/interpret and returns the result
+└── api/
+    └── interpret.js            # Serverless function; static lookup over the 64 hexagrams (no external API calls)
 ```
 
 ## Tech Stack
@@ -103,13 +90,11 @@ The `vercel.json` file in the root directory is pre-configured to:
 - **Frontend**: React 19 + TypeScript
 - **Build Tool**: Vite 6
 - **Styling**: Tailwind CSS 4 (with PostCSS)
-- **AI**: Google Gemini API 2.5 Flash
+- **Interpretation data**: static curated dataset of the 64 I Ching hexagrams (no AI/external API calls, no cost per request)
 - **Deployment**: Vercel
 
 ## Notes
 
-- `.env` is ignored by git (in `.gitignore`) and should never be committed
-- `GEMINI_API_KEY` is used by the serverless function in `api/interpret.ts`
 - All Tailwind CSS is processed locally (no CDN dependency)
 - App supports Vietnamese language throughout
 

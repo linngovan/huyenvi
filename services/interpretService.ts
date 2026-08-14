@@ -25,7 +25,9 @@ export const interpretHexagram = async (lines: LineType[]): Promise<any> => {
       originalText: "Tâm thành tắc linh.",
       generalMeaning: "Hiện tại thiên cơ chưa thể tiết lộ. Vui lòng thử lại sau giây lát hoặc tịnh tâm hơn.",
       career: "Kiên nhẫn chờ đợi thời cơ.",
+      wealth: "Tài lộc tùy tâm mà đến.",
       love: "Vạn sự tùy duyên.",
+      family: "Giữ hòa khí trong nhà.",
       advice: "Hãy giữ tâm an lạc."
     };
   }

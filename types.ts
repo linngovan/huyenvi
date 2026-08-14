@@ -14,6 +14,8 @@ export interface InterpretationResponse {
   originalText: string; // The Han-Viet name or poetic text
   generalMeaning: string;
   career: string;
+  wealth: string;
   love: string;
+  family: string;
   advice: string;
 }

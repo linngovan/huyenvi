@@ -1,9 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import handler from './api/interpret';
-
-dotenv.config();
 
 const app = express();
 const PORT = 3001;

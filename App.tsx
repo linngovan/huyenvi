@@ -2,8 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { AppState, LineType, InterpretationResponse } from './types';
 import CoinToss from './components/CoinToss';
 import HexagramVisual from './components/HexagramVisual';
-import { interpretHexagram } from './services/geminiService';
+import { interpretHexagram } from './services/interpretService';
 import { YinYangSymbol } from './components/YinYangSymbol';
+import ProductRecommend from './components/ProductRecommend';
 
 const App: React.FC = () => {
   const [state, setState] = useState<AppState>('INTRO');
@@ -85,7 +86,7 @@ const App: React.FC = () => {
   }, [state]);
 
   return (
-    <div className="min-h-screen w-full font-roboto bg-[#020617] text-white relative overflow-x-hidden selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen w-full font-app bg-[#020617] text-white relative overflow-x-hidden selection:bg-purple-500 selection:text-white">
 
       {/* Background Audio Element */}
       {/* Using a royalty-free ambient track 'Nebula' or similar spiritual drone */}
@@ -132,7 +133,7 @@ const App: React.FC = () => {
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light"></div>
       </div>
 
-      <div className="max-w-5xl mx-auto px-4 py-10 relative z-10 flex flex-col min-h-screen">
+      <div className="max-w-5xl lg:max-w-7xl mx-auto px-4 py-10 relative z-10 flex flex-col min-h-screen">
 
         {/* Header */}
         <header className="flex flex-col items-center justify-center mb-16 mt-12 relative z-20">
@@ -145,13 +146,13 @@ const App: React.FC = () => {
           </div>
 
           {/* Added py-4 and leading-tight to prevent accent clipping */}
-          <h1 className="text-5xl md:text-7xl font-thin tracking-[0.2em] text-center mb-2 py-4 leading-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-purple-100 to-purple-400 drop-shadow-[0_0_20px_rgba(168,85,247,0.6)] select-none">
+          <h1 className="text-5xl md:text-7xl font-extralight tracking-[0.2em] text-center mb-2 py-4 leading-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-purple-100 to-purple-400 drop-shadow-[0_0_20px_rgba(168,85,247,0.6)] select-none">
             HUYỀN VI
           </h1>
 
           <div className="h-[1px] w-32 bg-gradient-to-r from-transparent via-purple-500 to-transparent mb-5 opacity-70"></div>
 
-          <p className="text-purple-200/70 font-light text-xs md:text-sm tracking-[0.4em] uppercase">
+          <p className="text-purple-200/70 font-medium text-xs md:text-sm tracking-[0.4em] uppercase">
             Kinh Dịch • AI
           </p>
         </header>
@@ -166,8 +167,8 @@ const App: React.FC = () => {
                 {/* Decoration light */}
                 <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple-500/30 blur-[60px] group-hover:bg-purple-500/50 transition-all duration-700"></div>
 
-                <h2 className="text-2xl font-light mb-6 text-white">Khởi Tạo Quẻ</h2>
-                <p className="mb-8 leading-relaxed text-slate-300 font-light text-lg">
+                <h2 className="text-2xl font-semibold mb-6 text-white">Khởi Tạo Quẻ</h2>
+                <p className="mb-8 leading-relaxed text-slate-300 font-normal text-lg">
                   Tập trung vào câu hỏi của bạn và nhấn nút bên dưới.
                   Hệ thống sẽ tự động thực hiện 6 lần gieo hào để kiến tạo quẻ dịch tương ứng với năng lượng của bạn.
                 </p>
@@ -179,7 +180,7 @@ const App: React.FC = () => {
                   <span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-purple-600 group-hover:translate-x-0 ease">
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                   </span>
-                  <span className="absolute flex items-center justify-center w-full h-full text-purple-200 transition-all duration-300 transform group-hover:translate-x-full ease tracking-widest uppercase text-sm font-bold">Xin Quẻ</span>
+                  <span className="absolute flex items-center justify-center w-full h-full text-purple-200 transition-all duration-300 transform group-hover:translate-x-full ease tracking-widest uppercase text-sm font-semibold">Xin Quẻ</span>
                   <span className="relative invisible">Xin Quẻ</span>
                 </button>
               </div>
@@ -206,7 +207,7 @@ const App: React.FC = () => {
                 <HexagramVisual lines={lines} />
                 <div className="absolute inset-0 bg-purple-500/10 blur-md rounded-full"></div>
               </div>
-              <h2 className="text-2xl font-light text-white mb-2 tracking-widest">PHÂN TÍCH DỮ LIỆU</h2>
+              <h2 className="text-2xl font-semibold text-white mb-2 tracking-widest">PHÂN TÍCH DỮ LIỆU</h2>
               <div className="flex gap-1 mt-2">
                 <div className="w-2 h-2 bg-purple-500 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                 <div className="w-2 h-2 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
@@ -217,22 +218,22 @@ const App: React.FC = () => {
 
           {/* RESULT */}
           {state === 'RESULT' && result && (
-            <div ref={scrollRef} className="w-full max-w-4xl animate-[fadeInUp_0.8s_ease-out] pb-12">
+            <div ref={scrollRef} className="w-full max-w-4xl lg:max-w-none animate-[fadeInUp_0.8s_ease-out] pb-12">
 
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
                 {/* Left Column: Hexagram & Meta */}
-                <div className="lg:col-span-4 flex flex-col gap-6">
+                <div className="lg:col-span-3 flex flex-col gap-6">
                   <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 text-center flex flex-col items-center shadow-lg relative overflow-hidden">
                     <div className="absolute top-0 w-full h-1 bg-gradient-to-r from-purple-900 via-purple-500 to-purple-900"></div>
                     <div className="mb-6 scale-90">
                       <HexagramVisual lines={lines} />
                     </div>
-                    <h2 className="text-3xl font-bold text-white mb-2 uppercase tracking-wide drop-shadow-md">
+                    <h2 className="text-3xl font-semibold text-white mb-2 uppercase tracking-wide drop-shadow-md">
                       {result.hexagramName}
                     </h2>
                     <div className="w-10 h-1 bg-purple-500 rounded-full mb-4"></div>
-                    <p className="text-purple-200 font-light italic text-sm">
+                    <p className="text-purple-200 font-normal italic text-sm">
                       "{result.originalText}"
                     </p>
                   </div>
@@ -240,7 +241,7 @@ const App: React.FC = () => {
                   <div className="flex flex-col gap-3 relative z-20">
                     <button
                       onClick={handleStart}
-                      className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-sm font-bold tracking-widest text-purple-300 hover:text-white transition-all duration-300 uppercase group cursor-pointer"
+                      className="w-full py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-sm font-semibold tracking-widest text-purple-300 hover:text-white transition-all duration-300 uppercase group cursor-pointer"
                     >
                       <span className="inline-block transition-transform group-hover:rotate-180 mr-2">↻</span>
                       Gieo Quẻ Mới
@@ -248,15 +249,16 @@ const App: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Right Column: Interpretation */}
-                <div className="lg:col-span-8 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg relative">
+                {/* Middle Column: Interpretation */}
+                <div className="lg:col-span-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg relative">
 
                   {/* General */}
                   <div className="mb-10">
-                    <h3 className="text-xl font-medium text-purple-400 mb-4 flex items-center gap-2 uppercase tracking-widest text-xs">
-                      <span className="w-2 h-2 bg-white rounded-full"></span> Tổng Quan
+                    <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-4">
+                      <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"></path><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                      Tổng Quan
                     </h3>
-                    <p className="text-slate-100 leading-relaxed text-lg font-light text-justify">
+                    <p className="text-slate-100 leading-relaxed text-lg font-normal text-justify">
                       {result.generalMeaning}
                     </p>
                   </div>
@@ -264,23 +266,45 @@ const App: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
                     {/* Career */}
                     <div className="bg-purple-900/20 p-6 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-colors">
-                      <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+                      <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-3">
                         <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
-                        Công Danh & Tài Lộc
+                        Công Danh
                       </h3>
-                      <p className="text-slate-300 text-sm leading-relaxed font-light">
+                      <p className="text-slate-300 text-sm leading-relaxed font-normal">
                         {result.career}
+                      </p>
+                    </div>
+
+                    {/* Wealth */}
+                    <div className="bg-purple-900/20 p-6 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-colors">
+                      <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-3">
+                        <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33"></path></svg>
+                        Tài Lộc
+                      </h3>
+                      <p className="text-slate-300 text-sm leading-relaxed font-normal">
+                        {result.wealth}
                       </p>
                     </div>
 
                     {/* Love */}
                     <div className="bg-purple-900/20 p-6 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-colors">
-                      <h3 className="text-white font-medium mb-3 flex items-center gap-2">
+                      <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-3">
                         <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                         Tình Duyên
                       </h3>
-                      <p className="text-slate-300 text-sm leading-relaxed font-light">
+                      <p className="text-slate-300 text-sm leading-relaxed font-normal">
                         {result.love}
+                      </p>
+                    </div>
+
+                    {/* Family */}
+                    <div className="bg-purple-900/20 p-6 rounded-xl border border-purple-500/10 hover:border-purple-500/30 transition-colors">
+                      <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-3">
+                        <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75"></path></svg>
+                        Gia Đạo
+                      </h3>
+                      <p className="text-slate-300 text-sm leading-relaxed font-normal">
+                        {result.family}
                       </p>
                     </div>
                   </div>
@@ -288,13 +312,19 @@ const App: React.FC = () => {
                   {/* Advice */}
                   <div className="relative">
                     <div className="absolute -left-8 top-0 bottom-0 w-1 bg-gradient-to-b from-purple-400 to-transparent"></div>
-                    <h3 className="text-lg font-medium text-white mb-3 pl-2">Lời Khuyên</h3>
-                    <p className="text-purple-100 italic font-light text-lg leading-relaxed pl-2">
+                    <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-3 pl-2">
+                      <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18"></path></svg>
+                      Lời Khuyên
+                    </h3>
+                    <p className="text-purple-100 italic font-normal text-lg leading-relaxed pl-2">
                       {result.advice}
                     </p>
                   </div>
 
                 </div>
+
+                {/* Right Column: Product Recommendations */}
+                <ProductRecommend />
               </div>
             </div>
           )}
