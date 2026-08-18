@@ -3,20 +3,33 @@ import { PRODUCTS } from '../data/products';
 import ProductCard from './ProductCard';
 import { trackEvent } from '../services/analytics';
 
-const SHOW_DELAY_MS = 5000;
-
-// Mobile-only: appears as a dismissible bottom sheet once the user has stayed on the
-// result screen for SHOW_DELAY_MS (a proxy for "actually reading, not just skimming").
+// Mobile-only: appears as a dismissible bottom sheet once the user scrolls down to the
+// "Gia Đạo" card — reading that far is a stronger, less annoying engagement signal than
+// a fixed timer, which can interrupt someone who's still just skimming the top sections.
 const ProductBottomSheet: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setVisible(true);
-      trackEvent('product_sheet_shown');
-    }, SHOW_DELAY_MS);
-    return () => clearTimeout(timer);
+    // Sheet is CSS-hidden on desktop (lg:hidden) — skip the observer there entirely so
+    // desktop sessions never fire product_sheet_shown/dismissed.
+    if (!window.matchMedia('(max-width: 1023px)').matches) return;
+
+    const target = document.getElementById('section-gia-dao');
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          trackEvent('product_sheet_shown');
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
   }, []);
 
   const handleDismiss = () => {
