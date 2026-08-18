@@ -5,6 +5,7 @@ import HexagramVisual from './components/HexagramVisual';
 import { interpretHexagram } from './services/interpretService';
 import { YinYangSymbol } from './components/YinYangSymbol';
 import ProductRecommend from './components/ProductRecommend';
+import ProductBottomSheet from './components/ProductBottomSheet';
 import { trackEvent } from './services/analytics';
 
 const App: React.FC = () => {
@@ -17,6 +18,14 @@ const App: React.FC = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const resultEnteredAtRef = useRef<number | null>(null);
+
+  const reportResultDuration = useCallback((trigger: 'restart' | 'exit') => {
+    if (resultEnteredAtRef.current === null) return;
+    const duration_ms = Date.now() - resultEnteredAtRef.current;
+    resultEnteredAtRef.current = null;
+    trackEvent('result_time_spent', { duration_ms, trigger });
+  }, []);
 
   // Toggle Music Function
   const toggleMusic = () => {
@@ -44,6 +53,7 @@ const App: React.FC = () => {
   }, []);
 
   const handleStart = () => {
+    reportResultDuration('restart');
     setLines([]);
     setResult(null);
     setState('TOSSING');
@@ -67,6 +77,7 @@ const App: React.FC = () => {
       setResult(interpretation);
       setState('RESULT');
       trackEvent('view_result', { hexagram_name: interpretation.hexagramName });
+      resultEnteredAtRef.current = Date.now();
     } catch (e) {
       console.error(e);
     }
@@ -87,6 +98,22 @@ const App: React.FC = () => {
       scrollRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [state]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        reportResultDuration('exit');
+      }
+    };
+    const handlePageHide = () => reportResultDuration('exit');
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', handlePageHide);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', handlePageHide);
+    };
+  }, [reportResultDuration]);
 
   return (
     <div className="min-h-screen w-full font-app bg-[#020617] text-white relative overflow-x-hidden selection:bg-purple-500 selection:text-white">
@@ -259,7 +286,7 @@ const App: React.FC = () => {
                 </div>
 
                 {/* Middle Column: Interpretation */}
-                <div className="order-3 lg:order-none lg:col-span-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg relative">
+                <div className="lg:col-span-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg relative">
 
                   {/* General */}
                   <div className="mb-10">
@@ -332,9 +359,12 @@ const App: React.FC = () => {
 
                 </div>
 
-                {/* Right Column: Product Recommendations */}
+                {/* Right Column: Product Recommendations (desktop sidebar) */}
                 <ProductRecommend />
               </div>
+
+              {/* Mobile-only: product bottom sheet, appears after 5s dwell */}
+              <ProductBottomSheet />
             </div>
           )}
         </main>
