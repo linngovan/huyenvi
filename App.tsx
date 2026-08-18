@@ -58,16 +58,7 @@ const App: React.FC = () => {
   };
 
   const handleLineGenerated = useCallback((line: LineType) => {
-    setLines(prev => {
-      const newLines = [...prev, line];
-      if (newLines.length === 6) {
-        setTimeout(() => {
-          setState('CALCULATING');
-          processResult(newLines);
-        }, 800);
-      }
-      return newLines;
-    });
+    setLines(prev => [...prev, line]);
   }, []);
 
   const processResult = async (completedLines: LineType[]) => {
@@ -75,10 +66,21 @@ const App: React.FC = () => {
       const interpretation = await interpretHexagram(completedLines);
       setResult(interpretation);
       setState('RESULT');
+      trackEvent('view_result', { hexagram_name: interpretation.hexagramName });
     } catch (e) {
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    if (lines.length !== 6) return;
+    const timer = setTimeout(() => {
+      setState('CALCULATING');
+      processResult(lines);
+    }, 800);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lines]);
 
   useEffect(() => {
     if (state === 'RESULT' && scrollRef.current) {
@@ -257,7 +259,7 @@ const App: React.FC = () => {
                 </div>
 
                 {/* Middle Column: Interpretation */}
-                <div className="lg:col-span-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg relative">
+                <div className="order-3 lg:order-none lg:col-span-6 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-lg relative">
 
                   {/* General */}
                   <div className="mb-10">

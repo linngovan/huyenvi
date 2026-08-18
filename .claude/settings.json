@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node event-check.mjs)",
+      "Bash(node -e ' *)",
+      "Bash(node coin-anim-check2.mjs)"
+    ]
+  }
+}

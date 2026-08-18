@@ -4,7 +4,7 @@ import { trackEvent } from '../services/analytics';
 
 const ProductRecommend: React.FC = () => {
   return (
-    <div className="lg:col-span-3 mt-6 lg:mt-0 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg">
+    <div className="order-2 lg:order-none lg:col-span-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg">
       <h3 className="flex items-center gap-2 text-lg font-semibold text-white mb-1">
         <svg className="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H4.5a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 9.75V7.5m0 0H6.375a1.125 1.125 0 01-1.125-1.125v-1.5A1.125 1.125 0 016.375 3.75h11.25c.621 0 1.125.504 1.125 1.125v1.5A1.125 1.125 0 0117.625 7.5H12"></path></svg>
         Vật Phẩm Hộ Mệnh Gợi Ý

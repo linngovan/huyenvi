@@ -61,7 +61,7 @@ const CoinToss: React.FC<CoinTossProps> = ({ onTossComplete, tossCount }) => {
       {/* Coins Container */}
       <div className="flex gap-6 perspective-500">
         {coins.map((coinVal, idx) => (
-          <div key={idx} className={`w-24 h-24 relative preserve-3d transition-all duration-[1.2s] ${isSpinning ? 'animate-spin-coin' : ''}`}>
+          <div key={idx} className={`w-24 h-24 relative preserve-3d ${isSpinning ? 'animate-spin-coin' : ''}`}>
              {/* Coin Faces */}
              
              {/* HEAD (Yang) - Modern Silver Face */}
