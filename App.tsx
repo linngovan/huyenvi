@@ -230,6 +230,12 @@ const App: React.FC = () => {
                 onTossComplete={handleLineGenerated}
                 tossCount={lines.length}
               />
+
+              <ProductBottomSheet
+                trigger={{ type: 'timer', delayMs: 8000 }}
+                listName="Bottom Sheet Trong Lúc Gieo"
+                context="tossing"
+              />
             </div>
           )}
 
@@ -363,8 +369,12 @@ const App: React.FC = () => {
                 <ProductRecommend />
               </div>
 
-              {/* Mobile-only: product bottom sheet, appears after 5s dwell */}
-              <ProductBottomSheet />
+              {/* Mobile-only: product bottom sheet, appears once "Gia Đạo" scrolls into view */}
+              <ProductBottomSheet
+                trigger={{ type: 'scroll', targetId: 'section-gia-dao' }}
+                listName="Bottom Sheet Vật Phẩm Gợi Ý"
+                context="result"
+              />
             </div>
           )}
         </main>
