@@ -235,6 +235,8 @@ const App: React.FC = () => {
                 trigger={{ type: 'timer', delayMs: 8000 }}
                 listName="Bottom Sheet Trong Lúc Gieo"
                 context="tossing"
+                message="✨ Trong lúc vũ trụ đang an bài quẻ dịch cho bạn — xem qua vài vật phẩm được nhiều người tin dùng."
+                progress={{ current: lines.length, total: 6 }}
               />
             </div>
           )}
@@ -374,6 +376,8 @@ const App: React.FC = () => {
                 trigger={{ type: 'scroll', targetId: 'section-gia-dao' }}
                 listName="Bottom Sheet Vật Phẩm Gợi Ý"
                 context="result"
+                heading="Vật Phẩm Hộ Mệnh Gợi Ý"
+                message="Nội dung dưới đây có thể chứa liên kết tiếp thị liên kết."
               />
             </div>
           )}

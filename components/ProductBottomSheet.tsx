@@ -11,13 +11,18 @@ interface ProductBottomSheetProps {
   trigger: Trigger;
   listName: string;
   context: string; // distinguishes which screen/placement fired product_sheet_shown/dismissed
+  message: string;
+  heading?: string; // omit for a leaner sheet (e.g. the tossing companion message already explains itself)
+  progress?: { current: number; total: number }; // renders a dot tracker, e.g. hào 1-6 while tossing
 }
 
-// Mobile-only, dismissible bottom sheet. Two trigger modes:
+// Mobile-only, dismissible bottom sheet — a true bottom sheet (flush to the device edge,
+// rounded top corners only), not a floating card, so it reads as part of the app rather
+// than an ad. Two trigger modes:
 // - 'timer': fixed delay after mount (used during TOSSING — dead time while the coins animate)
 // - 'scroll': fires when a given element id scrolls into view (used on RESULT — "Gia Đạo" card,
 //   a stronger engagement signal than a fixed timer since it means the user is actually reading)
-const ProductBottomSheet: React.FC<ProductBottomSheetProps> = ({ trigger, listName, context }) => {
+const ProductBottomSheet: React.FC<ProductBottomSheetProps> = ({ trigger, listName, context, message, heading, progress }) => {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
@@ -63,32 +68,53 @@ const ProductBottomSheet: React.FC<ProductBottomSheetProps> = ({ trigger, listNa
     <div
       className={`lg:hidden fixed inset-x-0 bottom-0 z-40 transition-transform duration-500 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-full pointer-events-none'}`}
     >
-      <div className="mx-3 mb-3 bg-[#140b28]/95 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-[0_-4px_30px_rgba(0,0,0,0.4)]">
-        <div className="flex items-start justify-between mb-1">
-          <h3 className="flex items-center gap-2 text-base font-semibold text-white">
-            <svg className="w-5 h-5 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H4.5a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 9.75V7.5m0 0H6.375a1.125 1.125 0 01-1.125-1.125v-1.5A1.125 1.125 0 016.375 3.75h11.25c.621 0 1.125.504 1.125 1.125v1.5A1.125 1.125 0 0117.625 7.5H12"></path></svg>
-            Vật Phẩm Hộ Mệnh Gợi Ý
+      <div className="relative rounded-t-[22px] bg-[#140b28]/80 backdrop-blur-xl overflow-hidden pt-3 px-4 pb-5 animate-sheet-breathe">
+        {/* light seam along the top edge — where the sheet "meets" the ritual above */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r from-transparent via-purple-400 to-transparent animate-sheet-seam" />
+        {/* soft sheen sweep */}
+        <div className="pointer-events-none absolute inset-y-0 -left-[60%] w-2/5 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-sheet-sheen" />
+
+        <div className="relative z-10 w-9 h-1 rounded-full bg-white/20 mx-auto mb-3" />
+
+        <button
+          onClick={handleDismiss}
+          aria-label="Đóng"
+          className="absolute top-3 right-4 z-10 p-1 -m-1 text-slate-400 hover:text-white transition-colors cursor-pointer"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+
+        {heading && (
+          <h3 className="relative z-10 flex items-center gap-2 text-sm font-semibold text-white mb-1 pr-6">
+            <svg className="w-4 h-4 text-purple-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H4.5a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 9.75V7.5m0 0H6.375a1.125 1.125 0 01-1.125-1.125v-1.5A1.125 1.125 0 016.375 3.75h11.25c.621 0 1.125.504 1.125 1.125v1.5A1.125 1.125 0 0117.625 7.5H12"></path></svg>
+            {heading}
           </h3>
-          <button
-            onClick={handleDismiss}
-            aria-label="Đóng"
-            className="p-1 -m-1 text-slate-400 hover:text-white transition-colors cursor-pointer"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M6 18L18 6M6 6l12 12"></path></svg>
-          </button>
-        </div>
-        <p className="text-slate-500 text-[11px] font-light mb-3">
-          Nội dung dưới đây có thể chứa liên kết tiếp thị liên kết.
+        )}
+
+        <p className="relative z-10 text-xs text-slate-300 leading-relaxed mb-3 pr-6">
+          {message}
         </p>
 
-        <div className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-1 -mx-1 px-1">
+        {progress && (
+          <div className="relative z-10 flex gap-1.5 mb-3">
+            {Array.from({ length: progress.total }).map((_, i) => (
+              <div
+                key={i}
+                className={`w-1.5 h-1.5 rounded-full transition-colors ${i < progress.current ? 'bg-purple-500 shadow-[0_0_6px_rgba(168,85,247,0.9)]' : 'bg-white/15'}`}
+              />
+            ))}
+          </div>
+        )}
+
+        <div className="relative z-10 flex gap-2.5 overflow-x-auto snap-x snap-mandatory pb-1 -mx-1 px-1">
           {PRODUCTS.map((product, idx) => (
             <ProductCard
               key={idx}
               product={product}
               index={idx}
               listName={listName}
-              className="snap-start shrink-0 w-36"
+              variant="compact"
+              className="snap-start flex-1 min-w-[150px] shrink-0"
             />
           ))}
         </div>

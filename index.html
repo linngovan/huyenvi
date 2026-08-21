@@ -44,6 +44,33 @@
       .animate-spin-coin {
         animation: spin-coin 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
       }
+      /* Product bottom sheet: light seam, sheen sweep, breathing glow */
+      @keyframes sheet-seam {
+        to { background-position: -200% 0; }
+      }
+      .animate-sheet-seam {
+        background-size: 200% 100%;
+        animation: sheet-seam 3s linear infinite;
+      }
+      @keyframes sheet-sheen {
+        0% { left: -60%; }
+        45%, 100% { left: 130%; }
+      }
+      .animate-sheet-sheen {
+        animation: sheet-sheen 3.6s ease-in-out infinite;
+      }
+      @keyframes sheet-breathe {
+        0%, 100% { box-shadow: 0 -8px 26px rgba(168,85,247,0.16); }
+        50% { box-shadow: 0 -12px 36px rgba(168,85,247,0.30); }
+      }
+      .animate-sheet-breathe {
+        animation: sheet-breathe 3.2s ease-in-out infinite;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .animate-sheet-seam, .animate-sheet-sheen, .animate-sheet-breathe {
+          animation: none;
+        }
+      }
       /* Custom Scrollbar */
       ::-webkit-scrollbar {
         width: 6px;
