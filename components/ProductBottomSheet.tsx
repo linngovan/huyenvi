@@ -14,6 +14,7 @@ interface ProductBottomSheetProps {
   message: string;
   heading?: string; // omit for a leaner sheet (e.g. the tossing companion message already explains itself)
   progress?: { current: number; total: number }; // renders a dot tracker, e.g. hào 1-6 while tossing
+  note?: string; // small reassurance line, e.g. "results show automatically" so users don't dismiss early
 }
 
 // Mobile-only, dismissible bottom sheet — a true bottom sheet (flush to the device edge,
@@ -22,7 +23,7 @@ interface ProductBottomSheetProps {
 // - 'timer': fixed delay after mount (used during TOSSING — dead time while the coins animate)
 // - 'scroll': fires when a given element id scrolls into view (used on RESULT — "Gia Đạo" card,
 //   a stronger engagement signal than a fixed timer since it means the user is actually reading)
-const ProductBottomSheet: React.FC<ProductBottomSheetProps> = ({ trigger, listName, context, message, heading, progress }) => {
+const ProductBottomSheet: React.FC<ProductBottomSheetProps> = ({ trigger, listName, context, message, heading, progress, note }) => {
   const [visible, setVisible] = useState(false);
   const [dismissed, setDismissed] = useState(false);
 
@@ -104,6 +105,12 @@ const ProductBottomSheet: React.FC<ProductBottomSheetProps> = ({ trigger, listNa
               />
             ))}
           </div>
+        )}
+
+        {note && (
+          <p className="relative z-10 text-[11px] text-slate-500 italic mb-3 pr-6">
+            {note}
+          </p>
         )}
 
         {/* Vertical snap-scroll feed, one product filling the view at a time — swipe up for

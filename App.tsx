@@ -307,6 +307,7 @@ const App: React.FC = () => {
                 context="tossing"
                 message="✨ Trong lúc vũ trụ đang an bài quẻ dịch cho bạn — xem qua vài vật phẩm được nhiều người tin dùng."
                 progress={{ current: lines.length, total: 6 }}
+                note="Kết quả sẽ tự động hiển thị ngay sau đây, bạn không cần đóng popup này."
               />
 
               <ProductSlideIn
