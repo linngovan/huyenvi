@@ -66,8 +66,17 @@
       .animate-sheet-breathe {
         animation: sheet-breathe 3.2s ease-in-out infinite;
       }
+      /* Floating card variant (ProductSlideIn) — not anchored to an edge, so the glow
+         needs to sit evenly around the card instead of offset toward one side. */
+      @keyframes panel-breathe {
+        0%, 100% { box-shadow: 0 20px 45px -12px rgba(0,0,0,0.5), 0 0 22px rgba(168,85,247,0.14); }
+        50% { box-shadow: 0 20px 45px -12px rgba(0,0,0,0.5), 0 0 32px rgba(168,85,247,0.28); }
+      }
+      .animate-panel-breathe {
+        animation: panel-breathe 3.2s ease-in-out infinite;
+      }
       @media (prefers-reduced-motion: reduce) {
-        .animate-sheet-seam, .animate-sheet-sheen, .animate-sheet-breathe {
+        .animate-sheet-seam, .animate-sheet-sheen, .animate-sheet-breathe, .animate-panel-breathe {
           animation: none;
         }
       }

@@ -6,6 +6,7 @@ import { interpretHexagram } from './services/interpretService';
 import { YinYangSymbol } from './components/YinYangSymbol';
 import ProductRecommend from './components/ProductRecommend';
 import ProductBottomSheet from './components/ProductBottomSheet';
+import ProductSlideIn from './components/ProductSlideIn';
 import { trackEvent } from './services/analytics';
 
 const App: React.FC = () => {
@@ -236,6 +237,14 @@ const App: React.FC = () => {
                 listName="Bottom Sheet Trong Lúc Gieo"
                 context="tossing"
                 message="✨ Trong lúc vũ trụ đang an bài quẻ dịch cho bạn — xem qua vài vật phẩm được nhiều người tin dùng."
+                progress={{ current: lines.length, total: 6 }}
+              />
+
+              <ProductSlideIn
+                delayMs={8000}
+                listName="Slide In Trong Lúc Gieo"
+                context="tossing"
+                message="Trong lúc vũ trụ đang an bài quẻ dịch cho bạn, xem qua vài vật phẩm được nhiều người tin dùng."
                 progress={{ current: lines.length, total: 6 }}
               />
             </div>
