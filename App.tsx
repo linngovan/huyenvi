@@ -305,9 +305,8 @@ const App: React.FC = () => {
                 trigger={{ type: 'timer', delayMs: 8000 }}
                 listName="Bottom Sheet Trong Lúc Gieo"
                 context="tossing"
-                message="✨ Trong lúc vũ trụ đang an bài quẻ dịch cho bạn — xem qua vài vật phẩm được nhiều người tin dùng."
+                message="✨ Trong lúc vũ trụ đang an bài quẻ dịch cho bạn — xem qua vài vật phẩm được nhiều người tin dùng. Kết quả sẽ tự động hiển thị ngay sau đây, bạn không cần đóng popup này."
                 progress={{ current: lines.length, total: 6 }}
-                note="Kết quả sẽ tự động hiển thị ngay sau đây, bạn không cần đóng popup này."
               />
 
               <ProductSlideIn
