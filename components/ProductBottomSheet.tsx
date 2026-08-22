@@ -106,15 +106,18 @@ const ProductBottomSheet: React.FC<ProductBottomSheetProps> = ({ trigger, listNa
           </div>
         )}
 
-        <div className="relative z-10 flex gap-2.5 overflow-x-auto snap-x snap-mandatory pb-1 -mx-1 px-1">
+        {/* Vertical snap-scroll feed, one product filling the view at a time — swipe up for
+            the next, like scrolling TikTok. A sliver of the next card peeks at the bottom
+            as a "there's more" affordance. */}
+        <div className="relative z-10 h-[46vh] flex flex-col gap-3 overflow-y-auto snap-y snap-mandatory -mx-1 px-1">
           {getProductsForPlacement(context).map((product, idx) => (
             <ProductCard
               key={idx}
               product={product}
               index={idx}
               listName={listName}
-              variant="compact"
-              className="snap-start flex-1 min-w-[150px] shrink-0"
+              variant="feed"
+              className="snap-start shrink-0 h-[88%]"
             />
           ))}
         </div>

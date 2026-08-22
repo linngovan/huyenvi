@@ -6,7 +6,7 @@ interface ProductCardProps {
   product: Product;
   index: number;
   listName: string;
-  variant?: 'full' | 'compact';
+  variant?: 'full' | 'compact' | 'feed';
   className?: string;
 }
 
@@ -25,9 +25,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index, listName, var
         target="_blank"
         rel="noopener noreferrer sponsored"
         onClick={handleClick}
-        className={`flex items-center gap-2.5 bg-white/5 border border-white/10 rounded-xl p-1.5 pr-3 hover:border-purple-500/40 transition-colors group ${className}`}
+        className={`flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl p-2 pr-3 hover:border-purple-500/40 transition-colors group ${className}`}
       >
-        <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-white/5">
+        <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-white/5">
           <img
             src={product.image}
             alt={product.name}
@@ -35,12 +35,44 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index, listName, var
             loading="lazy"
           />
         </div>
-        <div className="min-w-0">
-          <p className="text-[11px] text-slate-200 font-normal truncate mb-1">
+        <div className="min-w-0 flex-1">
+          <p className="text-xs text-slate-200 font-normal leading-snug line-clamp-2 mb-1.5">
             {product.name}
           </p>
-          <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-white bg-purple-600 group-hover:bg-purple-500 rounded-full px-2.5 py-1 transition-colors">
-            Mua Ngay →
+          <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wide text-white bg-purple-600 group-hover:bg-purple-500 rounded-full px-2.5 py-1 transition-colors">
+            Xem Trên <img src="/icons/tiktok-logo.png" alt="TikTok" className="h-3 w-auto" /> →
+          </span>
+        </div>
+      </a>
+    );
+  }
+
+  if (variant === 'feed') {
+    // For a parent with an explicit fixed height (e.g. a vertical snap-scroll feed) — the
+    // image fills whatever space is left over after the text/button, instead of forcing
+    // its own aspect-square height, which would starve the text of room.
+    return (
+      <a
+        href={product.affiliateLink}
+        target="_blank"
+        rel="noopener noreferrer sponsored"
+        onClick={handleClick}
+        className={`flex flex-col bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-purple-500/40 transition-colors group ${className}`}
+      >
+        <div className="flex-1 min-h-0 w-full overflow-hidden bg-white/5 flex items-center justify-center">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+          />
+        </div>
+        <div className="p-3 shrink-0">
+          <p className="text-slate-200 text-sm font-normal leading-snug line-clamp-2 mb-2">
+            {product.name}
+          </p>
+          <span className="flex items-center justify-center gap-1.5 text-center text-xs font-semibold uppercase tracking-widest text-white bg-purple-600 group-hover:bg-purple-500 rounded-full py-2.5 shadow-[0_2px_10px_rgba(124,58,237,0.4)] transition-colors">
+            Xem Trên <img src="/icons/tiktok-logo.png" alt="TikTok" className="h-3.5 w-auto" />
           </span>
         </div>
       </a>
@@ -72,8 +104,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index, listName, var
             {product.summary}
           </p>
         )}
-        <span className="mt-auto block text-center text-xs font-semibold uppercase tracking-widest text-white bg-purple-600 group-hover:bg-purple-500 rounded-full py-2.5 shadow-[0_2px_10px_rgba(124,58,237,0.4)] transition-colors">
-          Mua Ngay
+        <span className="mt-auto flex items-center justify-center gap-1.5 text-center text-xs font-semibold uppercase tracking-widest text-white bg-purple-600 group-hover:bg-purple-500 rounded-full py-2.5 shadow-[0_2px_10px_rgba(124,58,237,0.4)] transition-colors">
+          Xem Trên <img src="/icons/tiktok-logo.png" alt="TikTok" className="h-3.5 w-auto" />
         </span>
       </div>
     </a>
