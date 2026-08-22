@@ -44,6 +44,13 @@ export const PRODUCTS: Product[] = [
     affiliateLink: "https://vt.tiktok.com/ZS9kTECrR2fow-cRWww/",
     placement: "tossing",
   },
+  {
+    name: "Nụ  bách xanh Cháy 20p Hộp 60nụ",
+    summary: "Nụ bách xanh mang đến hương thơm ngọt ấm tự nhiên, giúp thư giãn tinh thần, thanh lọc không khí, khử mùi hiệu quả và thu hút vượng khí cho không gian.",
+    image: "/products/nu_tram.webp",
+    affiliateLink: "https://vt.tiktok.com/ZS9kw45FSoTQA-Ypma5/",
+    placement: "result",
+  },
 ];
 
 export const getProductsForPlacement = (placement: 'tossing' | 'result'): Product[] =>
