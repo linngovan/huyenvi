@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
 import { AppState, LineType, InterpretationResponse } from './types';
 import CoinToss from './components/CoinToss';
 import HexagramVisual from './components/HexagramVisual';
@@ -20,6 +20,7 @@ const App: React.FC = () => {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const resultEnteredAtRef = useRef<number | null>(null);
+  const autostartRanRef = useRef(false);
 
   const reportResultDuration = useCallback((trigger: 'restart' | 'exit') => {
     if (resultEnteredAtRef.current === null) return;
@@ -67,6 +68,32 @@ const App: React.FC = () => {
     } 
     */
   };
+
+  // Ad-link entry point: https://.../?autostart=1 (add utm_source/utm_medium/utm_campaign
+  // for GA4 channel attribution — those are captured automatically, no extra code needed).
+  // Skips INTRO and starts tossing immediately, and best-effort tries to start the music.
+  // useLayoutEffect (not useEffect) so the state flip happens before first paint — no INTRO flash.
+  useLayoutEffect(() => {
+    if (autostartRanRef.current) return; // guards against React StrictMode's dev-only double-invoke
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('autostart') !== '1') return;
+    autostartRanRef.current = true;
+
+    if (audioRef.current) {
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => setIsMusicPlaying(true)).catch(() => {
+          // Blocked by the browser's autoplay policy (common on iOS Safari / the Facebook
+          // in-app browser, since arriving via a link click doesn't count as a direct
+          // user gesture on this page) — fail silently, the toss still starts normally.
+        });
+      }
+    }
+
+    trackEvent('click_xin_que', { source: 'ad_autostart' });
+    handleStart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleLineGenerated = useCallback((line: LineType) => {
     setLines(prev => [...prev, line]);
@@ -156,9 +183,51 @@ const App: React.FC = () => {
         {/* Deep gradient base */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#0f0720] via-[#1e1b4b] to-[#020617]"></div>
 
-        {/* Glowing orbs */}
-        <div className="absolute top-[-10%] left-[20%] w-[30vw] h-[30vw] rounded-full bg-purple-600/10 blur-[60px]"></div>
-        <div className="absolute bottom-[-10%] right-[10%] w-[20vw] h-[20vw] rounded-full bg-blue-600/10 blur-[60px]"></div>
+        {/* Glowing orbs — slow drift, like nebula clouds */}
+        <div className="animate-orb-a absolute top-[-10%] left-[20%] w-[30vw] h-[30vw] rounded-full bg-purple-600/10 blur-[60px]"></div>
+        <div className="animate-orb-b absolute bottom-[-10%] right-[10%] w-[20vw] h-[20vw] rounded-full bg-blue-600/10 blur-[60px]"></div>
+
+        {/* Starfield — two depths drifting at different speeds, twinkling */}
+        <div className="stars-far absolute inset-0"></div>
+        <div className="stars-near absolute inset-0"></div>
+
+        {/* Constellations — a few hand-placed star clusters for visual variety on top of the drifting field */}
+        <svg className="absolute top-[10%] left-[5%] w-36 h-32 opacity-70" viewBox="0 0 140 120" fill="none">
+          <g stroke="rgba(216,180,254,0.35)" strokeWidth="1">
+            <line x1="10" y1="60" x2="40" y2="20" />
+            <line x1="40" y1="20" x2="75" y2="45" />
+            <line x1="75" y1="45" x2="110" y2="15" />
+            <line x1="110" y1="15" x2="130" y2="55" />
+          </g>
+          <circle cx="10" cy="60" r="1.8" fill="#fff" style={{ animation: 'star-twinkle 5s ease-in-out infinite', animationDelay: '0s' }} />
+          <circle cx="40" cy="20" r="2.2" fill="#fff" style={{ animation: 'star-twinkle 4s ease-in-out infinite', animationDelay: '0.6s' }} />
+          <circle cx="75" cy="45" r="1.6" fill="#d8b4fe" style={{ animation: 'star-twinkle 5.5s ease-in-out infinite', animationDelay: '1.2s' }} />
+          <circle cx="110" cy="15" r="2" fill="#fff" style={{ animation: 'star-twinkle 4.5s ease-in-out infinite', animationDelay: '0.3s' }} />
+          <circle cx="130" cy="55" r="1.8" fill="#d8b4fe" style={{ animation: 'star-twinkle 5s ease-in-out infinite', animationDelay: '0.9s' }} />
+        </svg>
+
+        <svg className="absolute bottom-[12%] right-[6%] w-32 h-28 opacity-70" viewBox="0 0 130 110" fill="none">
+          <g stroke="rgba(216,180,254,0.35)" strokeWidth="1">
+            <line x1="20" y1="20" x2="70" y2="10" />
+            <line x1="70" y1="10" x2="110" y2="50" />
+            <line x1="110" y1="50" x2="60" y2="90" />
+            <line x1="60" y1="90" x2="20" y2="20" />
+          </g>
+          <circle cx="20" cy="20" r="2" fill="#fff" style={{ animation: 'star-twinkle 4.5s ease-in-out infinite', animationDelay: '0.2s' }} />
+          <circle cx="70" cy="10" r="1.7" fill="#d8b4fe" style={{ animation: 'star-twinkle 5s ease-in-out infinite', animationDelay: '0.8s' }} />
+          <circle cx="110" cy="50" r="2.2" fill="#fff" style={{ animation: 'star-twinkle 4s ease-in-out infinite', animationDelay: '1.4s' }} />
+          <circle cx="60" cy="90" r="1.8" fill="#fff" style={{ animation: 'star-twinkle 5.5s ease-in-out infinite', animationDelay: '0.5s' }} />
+        </svg>
+
+        <svg className="absolute top-[22%] right-[14%] w-24 h-20 opacity-60" viewBox="0 0 90 80" fill="none">
+          <g stroke="rgba(216,180,254,0.35)" strokeWidth="1">
+            <line x1="15" y1="60" x2="50" y2="15" />
+            <line x1="50" y1="15" x2="80" y2="55" />
+          </g>
+          <circle cx="15" cy="60" r="1.6" fill="#fff" style={{ animation: 'star-twinkle 5s ease-in-out infinite', animationDelay: '0.4s' }} />
+          <circle cx="50" cy="15" r="2" fill="#d8b4fe" style={{ animation: 'star-twinkle 4.5s ease-in-out infinite', animationDelay: '1s' }} />
+          <circle cx="80" cy="55" r="1.7" fill="#fff" style={{ animation: 'star-twinkle 5.2s ease-in-out infinite', animationDelay: '0.1s' }} />
+        </svg>
 
         {/* Grid overlay */}
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light"></div>

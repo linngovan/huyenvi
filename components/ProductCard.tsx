@@ -36,10 +36,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index, listName, var
           />
         </div>
         <div className="min-w-0">
-          <p className="text-[11px] text-slate-200 font-normal truncate mb-0.5">
+          <p className="text-[11px] text-slate-200 font-normal truncate mb-1">
             {product.name}
           </p>
-          <span className="text-[10px] font-semibold uppercase tracking-wide text-purple-300 group-hover:text-white transition-colors">
+          <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wide text-white bg-purple-600 group-hover:bg-purple-500 rounded-full px-2.5 py-1 transition-colors">
             Mua Ngay →
           </span>
         </div>
@@ -53,7 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index, listName, var
       target="_blank"
       rel="noopener noreferrer sponsored"
       onClick={handleClick}
-      className={`bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-purple-500/40 transition-colors group ${className}`}
+      className={`flex flex-col bg-white/5 border border-white/10 rounded-xl overflow-hidden hover:border-purple-500/40 transition-colors group ${className}`}
     >
       <div className="aspect-square w-full overflow-hidden bg-white/5">
         <img
@@ -63,14 +63,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index, listName, var
           loading="lazy"
         />
       </div>
-      <div className="p-3">
+      <div className="p-3 flex flex-col flex-1">
         <p className="text-slate-200 text-xs font-normal leading-snug line-clamp-2 mb-1.5 min-h-[2.2em]">
           {product.name}
         </p>
         <p className="text-slate-400 text-[11px] font-normal leading-snug mb-3">
           {product.summary}
         </p>
-        <span className="block text-center text-[11px] font-semibold uppercase tracking-widest text-purple-300 group-hover:text-white bg-purple-500/10 group-hover:bg-purple-600 rounded-full py-2 transition-colors">
+        <span className="mt-auto block text-center text-xs font-semibold uppercase tracking-widest text-white bg-purple-600 group-hover:bg-purple-500 rounded-full py-2.5 shadow-[0_2px_10px_rgba(124,58,237,0.4)] transition-colors">
           Mua Ngay
         </span>
       </div>
