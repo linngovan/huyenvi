@@ -1,5 +1,5 @@
 import React from 'react';
-import { PRODUCTS } from '../data/products';
+import { getProductsForPlacement } from '../data/products';
 import ProductCard from './ProductCard';
 
 // Desktop-only sidebar (see ProductBottomSheet for the mobile equivalent).
@@ -15,7 +15,7 @@ const ProductRecommend: React.FC = () => {
       </p>
 
       <div className="flex flex-col gap-4">
-        {PRODUCTS.map((product, idx) => (
+        {getProductsForPlacement('result').map((product, idx) => (
           <ProductCard key={idx} product={product} index={idx} listName="Sidebar Vật Phẩm Gợi Ý" className="w-full" />
         ))}
       </div>

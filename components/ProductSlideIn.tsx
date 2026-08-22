@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { PRODUCTS } from '../data/products';
+import { getProductsForPlacement } from '../data/products';
 import ProductCard from './ProductCard';
 import { trackEvent } from '../services/analytics';
 
 interface ProductSlideInProps {
   delayMs: number;
   listName: string;
-  context: string;
+  context: 'tossing' | 'result'; // also selects which products to show (see data/products.ts placement field)
   message: string;
   progress?: { current: number; total: number };
 }
@@ -73,7 +73,7 @@ const ProductSlideIn: React.FC<ProductSlideInProps> = ({ delayMs, listName, cont
         )}
 
         <div className="relative z-10 flex flex-col gap-2.5">
-          {PRODUCTS.map((product, idx) => (
+          {getProductsForPlacement(context).map((product, idx) => (
             <ProductCard key={idx} product={product} index={idx} listName={listName} variant="compact" className="w-full" />
           ))}
         </div>

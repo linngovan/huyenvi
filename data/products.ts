@@ -1,22 +1,42 @@
+export type ProductPlacement = 'tossing' | 'result' | 'both';
+
 export interface Product {
   name: string;
-  summary: string;
+  summary?: string;
   image: string;
   affiliateLink: string;
+  placement: ProductPlacement;
 }
 
-// Synced from the product Google Sheet. Same list shown for every hexagram for now (no tag mapping yet).
+// Synced from the product Google Sheet. "Vị trí hiển thị" column: Gieo quẻ -> tossing, Kết quả -> result, Cả hai -> both.
 export const PRODUCTS: Product[] = [
   {
     name: "Sách - Combo 3 Vở Sổ chép kinh in mờ cao cấp Kinh Địa Tạng, Chú Đại Bi, Kinh Sám Hối (TẶNG KÈM BÚT VIẾT) - Anan Books",
     summary: "Sổ chép kinh Địa Tạng giúp người dùng gieo duyên lành, tích phước báu, thanh lọc tâm hồn và giải tỏa căng thẳng hiệu quả.",
     image: "/products/so_chep_kinh_dia_tang.webp",
     affiliateLink: "https://vt.tiktok.com/ZS9kNAwBYmoaT-PE6Yq/",
+    placement: 'result',
   },
   {
     name: "Nhang Khuynh diệp Mộc Thảo An Hương 20, 30, 40 cm thơm dịu | Nhang thơm thờ cúng",
     summary: "Nhang Khuynh Diệp Mộc Thảo An mang lại không gian ít khói với hương thơm tự nhiên, giúp thanh lọc không khí, khử mùi và hỗ trợ phòng ngừa cảm lạnh.",
     image: "/products/nhang_khuynh_diep.webp",
     affiliateLink: "https://vt.tiktok.com/ZS9kYR515FedP-NlWTW/",
+    placement: 'result',
+  },
+  {
+    name: "Bánh Tráng Bò Tỏi Chua Cay Duy Best - Vị Tỏi Cay Nồng & Chua Tươi Mới",
+    image: "/products/banh_trang_bo_toi_chua_cay.webp",
+    affiliateLink: "https://vt.tiktok.com/ZS9kTw3GawcfP-rKfpn/",
+    placement: 'tossing',
+  },
+  {
+    name: "Dây Sạc Nhanh 3 Đầu Sạc Được Mọi Dòng Máy 120W 3in1 Silicon Dài 2M TypeC",
+    image: "/products/day_sac_nhanh.webp",
+    affiliateLink: "https://vt.tiktok.com/ZS9kTKF85FWga-pZl5i/",
+    placement: 'tossing',
   },
 ];
+
+export const getProductsForPlacement = (placement: 'tossing' | 'result'): Product[] =>
+  PRODUCTS.filter(p => p.placement === placement || p.placement === 'both');

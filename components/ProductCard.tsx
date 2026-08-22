@@ -67,9 +67,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index, listName, var
         <p className="text-slate-200 text-xs font-normal leading-snug line-clamp-2 mb-1.5 min-h-[2.2em]">
           {product.name}
         </p>
-        <p className="text-slate-400 text-[11px] font-normal leading-snug mb-3">
-          {product.summary}
-        </p>
+        {product.summary && (
+          <p className="text-slate-400 text-[11px] font-normal leading-snug mb-3">
+            {product.summary}
+          </p>
+        )}
         <span className="mt-auto block text-center text-xs font-semibold uppercase tracking-widest text-white bg-purple-600 group-hover:bg-purple-500 rounded-full py-2.5 shadow-[0_2px_10px_rgba(124,58,237,0.4)] transition-colors">
           Mua Ngay
         </span>

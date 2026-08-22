@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PRODUCTS } from '../data/products';
+import { getProductsForPlacement } from '../data/products';
 import ProductCard from './ProductCard';
 import { trackEvent } from '../services/analytics';
 
@@ -10,7 +10,7 @@ type Trigger =
 interface ProductBottomSheetProps {
   trigger: Trigger;
   listName: string;
-  context: string; // distinguishes which screen/placement fired product_sheet_shown/dismissed
+  context: 'tossing' | 'result'; // also selects which products to show (see data/products.ts placement field)
   message: string;
   heading?: string; // omit for a leaner sheet (e.g. the tossing companion message already explains itself)
   progress?: { current: number; total: number }; // renders a dot tracker, e.g. hào 1-6 while tossing
@@ -107,7 +107,7 @@ const ProductBottomSheet: React.FC<ProductBottomSheetProps> = ({ trigger, listNa
         )}
 
         <div className="relative z-10 flex gap-2.5 overflow-x-auto snap-x snap-mandatory pb-1 -mx-1 px-1">
-          {PRODUCTS.map((product, idx) => (
+          {getProductsForPlacement(context).map((product, idx) => (
             <ProductCard
               key={idx}
               product={product}
